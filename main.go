@@ -1,43 +1,44 @@
 package main
 
 import (
-    "fmt"
-    "log"
+	"fmt"
+	"log"
 	"time"
-    "github.com/gofiber/fiber/v3"
+
+	"github.com/gofiber/fiber/v3"
 )
 
 func main() {
-    app := fiber.New()
+	app := fiber.New()
 
-    type GetNameTimeRequest struct {
-        Name  string `json:"name"`
-    }
+	type GetNameTimeRequest struct {
+		Name string `json:"name"`
+	}
 
-    app.Get("/", func(c fiber.Ctx) error {
-        var body GetNameTimeRequest
+	app.Get("/", func(c fiber.Ctx) error {
+		var body GetNameTimeRequest
 
-        if err := c.Bind().Body(&body); err != nil {
-            return c.Status(400).JSON(fiber.Map{
-                "error": "invalid request body",
-                "example": fiber.Map{
-                    "name": "Olivia",
-                },
-            })
-        }
+		if len(c.Body()) > 0 {
+			if err := c.Bind().Body(&body); err != nil {
+				return c.Status(400).JSON(fiber.Map{
+					"error": "invalid request body",
+					"example": fiber.Map{
+						"name": "Olivia",
+					},
+				})
+			}
+		}
 
-        if body.Name == "" {
-            return c.Status(400).JSON(fiber.Map{
-                "error": "name is required",
-            })
-        }
+		if body.Name == "" {
+			body.Name = "Olivia"
+		}
 
 		now := time.Now()
-        return c.JSON(fiber.Map{
-			"message": fmt.Sprintf("My name is %s", body.Name),
+		return c.JSON(fiber.Map{
+			"message":   fmt.Sprintf("My name is %s", body.Name),
 			"timestamp": now.Unix(),
 		})
-    })
+	})
 
-    log.Fatal(app.Listen(":3000"))
+	log.Fatal(app.Listen(":3000"))
 }
