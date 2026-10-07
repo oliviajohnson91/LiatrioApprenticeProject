@@ -2,7 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "chore/add-github-workflow" ]
   pull_request:
     branches: [ "main" ]
 
