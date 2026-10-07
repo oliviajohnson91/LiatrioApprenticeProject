@@ -36,7 +36,7 @@ func main() {
 		now := time.Now()
 		return c.JSON(fiber.Map{
 			"message":   fmt.Sprintf("My name is %s", body.Name),
-			"timestamp": now.Unix(),
+			"timestamp": now.UnixMilli(),
 		})
 	})
 
