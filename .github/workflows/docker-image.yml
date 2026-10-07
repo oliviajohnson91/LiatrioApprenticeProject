@@ -14,5 +14,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+   
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      run: docker build . --file Dockerfile --tag liatrio-apprentice:$(date +%s)
+
+    - name: Run the Docker container
+      run: docker run -d -p 80:3000 liatrio-apprentice
+
+    - name: Run Apprentice Action
+      uses: liatrio/github-actions/apprentice-action@master
