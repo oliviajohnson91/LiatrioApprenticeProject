@@ -28,11 +28,26 @@ curl -X GET http://localhost:3000/ \
 
 Alternatively, create a `GET` request to `http://localhost:3000/` using Postman or another API client. Be sure to include the `name` value in the JSON request body.
 
-## API Endpoint
+## API Endpoints
+
+### GET Endpoint
+The API endpoint does not accept a request body and always returns a JSON object containing a default name, timestamp, and formatted time.
+
+#### Example Response
+
+```json
+{
+  "message": "My name is Olivia",
+  "timestamp": 1791572962232,
+  "formatted_time": "19:09:22 10-09-2026"
+}
+```
+
+### POST Endpoint
 
 The API endpoint expects a `name` value in the request body and returns a JSON object containing the provided name and the current timestamp.
 
-### Request Body
+#### Request Body
 
 ```json
 {
@@ -40,12 +55,13 @@ The API endpoint expects a `name` value in the request body and returns a JSON o
 }
 ```
 
-### Example Response
+#### Example Response
 
 ```json
 {
   "message": "My name is Olivia",
-  "timestamp": 1791232163
+  "timestamp": 1791572962232,
+  "formatted_time": "19:09:22 10-09-2026"
 }
 ```
 
@@ -67,12 +83,35 @@ The application will now be available at `http://localhost:3000`.
 
 ### Testing the Dockerized API
 
+#### GET
 Using `curl`:
 
 ```bash
-curl -X GET http://localhost:3000/ \
+curl -X GET http://localhost:3000/
+```
+
+Alternatively, create a `GET` request to `http://localhost:3000/` using Postman or another API client.
+
+#### POST
+Using `curl`:
+
+```bash
+curl -X POST http://localhost:3000/ \
   -H "Content-Type: application/json" \
   -d '{"name":"Olivia"}'
 ```
 
-Alternatively, create a `GET` request to `http://localhost:3000/` using Postman or another API client. Be sure to include the `name` value in the JSON request body.
+Alternatively, create a `POST` request to `http://localhost:3000/` using Postman or another API client. Be sure to include the `name` value in the JSON request body.
+
+
+## GitHub Actions
+The repository has a GitHub Actions Workflow that
+  - Builds the application's Docker image
+  - Verifies the application functionality using Liatrio's GitHub [apprentice-action/https://github.com/liatrio/github-actions/tree/master/apprentice-action]
+  - On successful testing, pushes the image to Docker Hub
+  - On successful push, deploys the image to Google Cloud Platform
+
+### Testing the Deployed Application
+Send a GET request to https://go-api-979593700395.us-central1.run.app/ without a request body as shown in previous instructions.
+
+Send a POST request to https://go-api-979593700395.us-central1.run.app/ with the name in the body as shown in previous instructions.
