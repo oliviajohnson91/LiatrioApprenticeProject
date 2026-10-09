@@ -18,8 +18,9 @@ func main() {
 	app.Get("/", func(c fiber.Ctx) error {
 		now := time.Now()
 		return c.JSON(fiber.Map{
-			"message":   "My name is Olivia",
-			"timestamp": now.UnixMilli(),
+			"message":        "My name is Olivia",
+			"timestamp":      now.UnixMilli(),
+			"formatted_time": now.Format("15:04:05 01-02-2006"),
 		})
 	})
 
@@ -43,8 +44,9 @@ func main() {
 
 		now := time.Now()
 		return c.JSON(fiber.Map{
-			"message":   fmt.Sprintf("My name is %s", body.Name),
-			"timestamp": now.UnixMilli(),
+			"message":        fmt.Sprintf("My name is %s", body.Name),
+			"timestamp":      now.UnixMilli(),
+			"formatted_time": now.Format("15:04:05 01-02-2006"),
 		})
 	})
 
