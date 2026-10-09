@@ -16,6 +16,14 @@ func main() {
 	}
 
 	app.Get("/", func(c fiber.Ctx) error {
+		now := time.Now()
+		return c.JSON(fiber.Map{
+			"message":   "My name is Olivia",
+			"timestamp": now.UnixMilli(),
+		})
+	})
+
+	app.Post("/", func(c fiber.Ctx) error {
 		var body GetNameTimeRequest
 
 		if len(c.Body()) > 0 {
