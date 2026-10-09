@@ -2,7 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main", "chore/add-github-workflow" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -46,3 +46,46 @@ jobs:
 
       - name: Push the Docker image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/liatrio-apprentice:${IMAGE_TAG}
+    
+  deploy:
+    needs: push
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+
+      - name: Set up Google Cloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Deploy the newly pushed Docker image
+        env:
+          PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          IMAGE: ${{ needs.push.outputs.image }}
+        run: |
+          set -euo pipefail
+
+          echo "Deploying image: $IMAGE"
+
+          gcloud run deploy go-api \
+            --image="$IMAGE" \
+            --region=us-central1 \
+            --project="$PROJECT_ID" \
+            --quiet
+
+      - name: Verify deployment
+        env:
+          PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+        run: |
+          gcloud run services describe go-api \
+            --region=us-central1 \
+            --project="$PROJECT_ID" \
+            --format="value(status.url)"
