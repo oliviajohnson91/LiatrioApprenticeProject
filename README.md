@@ -45,7 +45,7 @@ The API endpoint does not accept a request body and always returns a JSON object
 
 ### POST Endpoint
 
-The API endpoint expects a `name` value in the request body and returns a JSON object containing the provided name and the current timestamp.
+The API endpoint expects a `name` value in the request body and returns a JSON object containing the provided name, current timestamp, and formatted time.
 
 #### Request Body
 
@@ -107,7 +107,7 @@ Alternatively, create a `POST` request to `http://localhost:3000/` using Postman
 ## GitHub Actions
 The repository has a GitHub Actions Workflow that
   - Builds the application's Docker image
-  - Verifies the application functionality using Liatrio's GitHub [apprentice-action/https://github.com/liatrio/github-actions/tree/master/apprentice-action]
+  - Verifies the application functionality using Liatrio's GitHub [apprentice-action](https://github.com/liatrio/github-actions/tree/master/apprentice-action)
   - On successful testing, pushes the image to Docker Hub
   - On successful push, deploys the image to Google Cloud Platform
 
