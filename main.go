@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"time"
+	_ "time/tzdata"
 
 	"github.com/gofiber/fiber/v3"
 )
@@ -15,12 +16,15 @@ func main() {
 		Name string `json:"name"`
 	}
 
+	location, _ := time.LoadLocation("America/Los_Angeles")
+
 	app.Get("/", func(c fiber.Ctx) error {
 		now := time.Now()
+		pacificTime := time.Unix(now.Unix(), 0).In(location)
 		return c.JSON(fiber.Map{
 			"message":        "My name is Olivia",
 			"timestamp":      now.UnixMilli(),
-			"formatted_time": now.Format("15:04:05 01-02-2006"),
+			"formatted_time": pacificTime.Format("15:04:05 01-02-2006"),
 		})
 	})
 
@@ -43,10 +47,11 @@ func main() {
 		}
 
 		now := time.Now()
+		pacificTime := time.Unix(now.Unix(), 0).In(location)
 		return c.JSON(fiber.Map{
 			"message":        fmt.Sprintf("My name is %s", body.Name),
 			"timestamp":      now.UnixMilli(),
-			"formatted_time": now.Format("15:04:05 01-02-2006"),
+			"formatted_time": pacificTime.Format("15:04:05 01-02-2006"),
 		})
 	})
 
