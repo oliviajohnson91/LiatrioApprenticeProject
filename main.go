@@ -25,6 +25,7 @@ func main() {
 			"message":        "My name is Olivia",
 			"timestamp":      now.UnixMilli(),
 			"formatted_time": pacificTime.Format("15:04:05 01-02-2006"),
+			"version":        "v2",
 		})
 	})
 
@@ -52,6 +53,7 @@ func main() {
 			"message":        fmt.Sprintf("My name is %s", body.Name),
 			"timestamp":      now.UnixMilli(),
 			"formatted_time": pacificTime.Format("15:04:05 01-02-2006"),
+			"version":        "v2",
 		})
 	})
 
